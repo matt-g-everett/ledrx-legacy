@@ -13,4 +13,4 @@ install:
     - pip install -U platformio
 
 script:
-    - platformio ci --board=esp-wrover-kit
+    - platformio ci --board=esp-wrover-kit --framework=espidf
