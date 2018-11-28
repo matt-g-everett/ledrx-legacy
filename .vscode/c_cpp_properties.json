@@ -227,6 +227,5 @@
             "cppStandard": "c++11",
             "compilerPath": "/home/emateve/.platformio/packages/toolchain-xtensa32/bin/xtensa-esp32-elf-gcc -Wno-old-style-declaration  -Werror=all -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-error=unused-function -mfix-esp32-psram-cache-issue -Os -Wall -nostdlib -Wpointer-arith -Wno-error=unused-but-set-variable -Wno-error=unused-variable -mlongcalls -ffunction-sections -fdata-sections -fstrict-volatile-bitfields"
         }
-    ],
-    "version": 4
+    ]
 }
