@@ -19,6 +19,7 @@ deploy:
   - ".pioenvs/esp-wrover-kit/firmware.elf"
   overwrite: true
   skip_cleanup: true
+  draft: true
   on:
     repo: matt-g-everett/ledrx
     branches:
