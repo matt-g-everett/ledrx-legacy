@@ -1,3 +1,8 @@
 build/
 sdkconfig
 sdkconfig.old
+
+# OTA support files
+ota/ca_cert.pem
+ota/ca_key.pem
+ota/ledrx.bin
