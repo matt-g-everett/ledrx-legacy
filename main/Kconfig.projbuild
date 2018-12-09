@@ -1,14 +1,20 @@
 # put here your custom config value
-menu "Example Configuration"
+menu "ledrx Configuration"
 config ESP_WIFI_SSID
     string "WiFi SSID"
     default "ssid"
     help
-	SSID (network name) for the example to connect to.
+	    SSID (network name) for the example to connect to.
 
 config ESP_WIFI_PASSWORD
     string "WiFi Password"
     default "password"
     help
-	WiFi password (WPA or WPA2) for the example to use.
+	    WiFi password (WPA or WPA2) for the example to use.
+
+config FIRMWARE_UPG_URL
+    string "HTTP Server URL"
+    default "https://192.168.1.148:8070/ledrx.bin"
+	help
+		HTTP Server IP to download the image file from.
 endmenu
