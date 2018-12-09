@@ -8,3 +8,8 @@ EXCLUDE_COMPONENTS := asio aws_iot bt console cxx esp_adc_cal esp_http_client es
 EXTRA_COMPONENT_DIRS := $(PROJECT_PATH)/components
 
 include $(IDF_PATH)/make/project.mk
+
+all: bump_build_version
+
+bump_build_version:
+	$(PROJECT_PATH)/tools/bump-build-version.sh
