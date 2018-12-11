@@ -6,3 +6,4 @@ sdkconfig.old
 ota/ca_cert.pem
 ota/ca_key.pem
 ota/ledrx.bin
+ota/version
