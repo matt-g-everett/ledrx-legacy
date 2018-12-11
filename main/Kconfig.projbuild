@@ -17,4 +17,11 @@ config FIRMWARE_UPG_URL
     default "https://192.168.1.148:8070/ledrx.bin"
 	help
 		HTTP Server IP to download the image file from.
+
+config FIRMWARE_VERSION_URL
+    string "HTTP Server URL"
+    default "https://192.168.1.148:8070/version"
+	help
+		HTTP Server IP to download the image file from.
+
 endmenu
