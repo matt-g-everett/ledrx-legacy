@@ -47,7 +47,7 @@ void app_main(void)
     ESP_LOGI(TAG, "App version : %s", (const char *)version_start);
 
     wifi_initialise(WIFI_SSID, WIFI_PASS);
-    ota_initialise((const char *)server_cert_pem_start, OTA_VERSION_URL, (const char *)version_start);
+    ota_initialise((const char *)server_cert_pem_start, OTA_VERSION_URL, OTA_BIN_URL, (const char *)version_start);
     xTaskCreatePinnedToCore(ota_task, "ota", OTA_STACK_SIZE, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(coap_task, "coap", STACK_SIZE, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(led_task, "led", STACK_SIZE, NULL, 5, NULL, 1);
