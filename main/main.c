@@ -6,8 +6,10 @@
 #include "semver.h"
 #include "wifi.h"
 #include "ota.h"
+#include "coap_utils.h"
 
 #define OTA_STACK_SIZE 8192
+#define COAP_STACK_SIZE 2048
 #define STACK_SIZE 2048
 
 #define WIFI_SSID CONFIG_WIFI_SSID
@@ -28,12 +30,12 @@ extern const uint8_t version_end[] asm("_binary_version_end");
 //     }
 // }
 
-void coap_task(void *pParam) {
-    while (1) {
-        ESP_LOGI(TAG, "Doing coap crap on core (%d)...", xPortGetCoreID());
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
-    }
-}
+// void coap_task(void *pParam) {
+//     while (1) {
+//         ESP_LOGI(TAG, "Doing coap crap on core (%d)...", xPortGetCoreID());
+//         vTaskDelay(2000 / portTICK_PERIOD_MS);
+//     }
+// }
 
 void led_task(void *pParam) {
     while (1) {
@@ -49,6 +51,6 @@ void app_main(void)
     wifi_initialise(WIFI_SSID, WIFI_PASS);
     ota_initialise((const char *)server_cert_pem_start, OTA_VERSION_URL, OTA_BIN_URL, (const char *)version_start);
     xTaskCreatePinnedToCore(ota_task, "ota", OTA_STACK_SIZE, NULL, 5, NULL, 0);
-    xTaskCreatePinnedToCore(coap_task, "coap", STACK_SIZE, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(coap_task, "coap", COAP_STACK_SIZE, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(led_task, "led", STACK_SIZE, NULL, 5, NULL, 1);
 }
