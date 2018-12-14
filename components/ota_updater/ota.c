@@ -26,49 +26,6 @@ const char *ota_bin_url;
 semver_t current_version;
 uint8_t new_version_available = 0;
 
-// void print_sha256(const uint8_t *image_hash, const char *label)
-// {
-//     char hash_print[HASH_LEN * 2 + 1];
-//     hash_print[HASH_LEN * 2] = 0;
-//     for (int i = 0; i < HASH_LEN; ++i) {
-//         sprintf(&hash_print[i * 2], "%02x", image_hash[i]);
-//     }
-//     ESP_LOGI(TAG, "%s: %s", label, hash_print);
-// }
-
-// void log_partition_info(void) {
-//     uint8_t sha_256[HASH_LEN] = { 0 };
-//     esp_partition_t partition;
-
-//     // get sha256 digest for the partition table
-//     partition.address   = ESP_PARTITION_TABLE_OFFSET;
-//     partition.size      = ESP_PARTITION_TABLE_MAX_LEN;
-//     partition.type      = ESP_PARTITION_TYPE_DATA;
-//     esp_partition_get_sha256(&partition, sha_256);
-//     print_sha256(sha_256, "SHA-256 for the partition table: ");
-
-//     // get sha256 digest for bootloader
-//     partition.address   = ESP_BOOTLOADER_OFFSET;
-//     partition.size      = ESP_PARTITION_TABLE_OFFSET;
-//     partition.type      = ESP_PARTITION_TYPE_APP;
-//     esp_partition_get_sha256(&partition, sha_256);
-//     print_sha256(sha_256, "SHA-256 for bootloader: ");
-
-//     // get sha256 digest for running partition
-//     esp_partition_get_sha256(esp_ota_get_running_partition(), sha_256);
-//     print_sha256(sha_256, "SHA-256 for current firmware: ");
-// }
-
-// static void __attribute__((noreturn)) task_fatal_error()
-// {
-//     ESP_LOGE(TAG, "Exiting task due to fatal error...");
-//     (void)vTaskDelete(NULL);
-
-//     while (1) {
-//         ;
-//     }
-// }
-
 static void http_cleanup(esp_http_client_handle_t client)
 {
     esp_http_client_close(client);
@@ -221,16 +178,6 @@ uint8_t ota_download() {
         ESP_LOGE(TAG, "esp_ota_end failed!");
         http_cleanup(client);
         return 0;
-    }
-
-    if (esp_partition_check_identity(esp_ota_get_running_partition(), update_partition) == true) {
-        ESP_LOGI(TAG, "The current running firmware is same as the firmware just downloaded");
-        int i = 0;
-        ESP_LOGI(TAG, "When a new firmware is available on the server, press the reset button to download it");
-        while(1) {
-            ESP_LOGI(TAG, "Waiting for a new firmware ... %d", ++i);
-            vTaskDelay(2000 / portTICK_PERIOD_MS);
-        }
     }
 
     err = esp_ota_set_boot_partition(update_partition);

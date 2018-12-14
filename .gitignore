@@ -1,4 +1,6 @@
 build/
+publish/
+tls/
 sdkconfig
 sdkconfig.old
 

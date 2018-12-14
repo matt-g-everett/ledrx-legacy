@@ -9,7 +9,12 @@ EXTRA_COMPONENT_DIRS := $(PROJECT_PATH)/components
 
 include $(IDF_PATH)/make/project.mk
 
-.PHONY: ota
+.PHONY: ota increment
 
-ota: all
-	cp $(PROJECT_PATH)/version $(PROJECT_PATH)/ota/version
+increment:
+	# Increment the prerelease number automatically
+	python ota/inc-version.py
+
+ota: increment all
+	# Copy the version into the publish location
+	cp $(PROJECT_PATH)/version $(PROJECT_PATH)/publish/version

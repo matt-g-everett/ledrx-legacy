@@ -7,5 +7,5 @@
 # please read the ESP-IDF documents if you need to do this.
 #
 
-COMPONENT_EMBED_TXTFILES := ${PROJECT_PATH}/ota/ca_cert.pem
+COMPONENT_EMBED_TXTFILES := ${PROJECT_PATH}/tls/ca_cert.pem
 COMPONENT_EMBED_TXTFILES += ${PROJECT_PATH}/version
