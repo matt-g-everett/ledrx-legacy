@@ -6,7 +6,7 @@ semver_regex = re.compile(r'^(?P<start>\d+\.\d+\.\d+-[^+0-9]+)(?P<prerelease>\d+
 
 def main():
     project_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
-    version_path = os.path.join(project_dir, 'version')
+    version_path = os.path.join(project_dir, 'version.txt')
 
     with open(version_path, 'r') as f:
         version = f.readline()

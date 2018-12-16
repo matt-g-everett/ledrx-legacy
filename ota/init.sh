@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ -z "$1" ]; then
     echo "Please pass an IP address or domain name as the first parameter."

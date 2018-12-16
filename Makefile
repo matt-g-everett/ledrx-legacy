@@ -4,7 +4,7 @@
 #
 
 PROJECT_NAME := ledrx
-EXCLUDE_COMPONENTS := asio aws_iot bt console cxx esp_adc_cal esp_http_server esp_https_ota espcoredump expat fatfs freemodbus idf_test jsmn json mdns mqtt openssl protobuf-c protocomm sdmmc spiffs ulp wear_levelling wifi_provisioning
+EXCLUDE_COMPONENTS := asio aws_iot bt console cxx esp_adc_cal esp_https_ota espcoredump expat fatfs freemodbus idf_test jsmn json mdns mqtt protocomm sdmmc spiffs ulp wear_levelling wifi_provisioning
 EXTRA_COMPONENT_DIRS := $(PROJECT_PATH)/components
 
 include $(IDF_PATH)/make/project.mk
@@ -17,4 +17,4 @@ increment:
 
 ota: increment all
 	# Copy the version into the publish location
-	cp $(PROJECT_PATH)/version $(PROJECT_PATH)/publish/version
+	cp $(PROJECT_PATH)/version.txt $(PROJECT_PATH)/publish/version

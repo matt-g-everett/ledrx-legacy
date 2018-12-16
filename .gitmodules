@@ -1,0 +1,3 @@
+[submodule "modules/ledapi"]
+	path = modules/ledapi
+	url = git@github.com:matt-g-everett/ledapi.git

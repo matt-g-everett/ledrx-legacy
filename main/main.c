@@ -20,8 +20,8 @@
 const static char *TAG = "ledrx_main";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
-extern const uint8_t version_start[] asm("_binary_version_start");
-extern const uint8_t version_end[] asm("_binary_version_end");
+extern const uint8_t version_start[] asm("_binary_version_txt_start");
+extern const uint8_t version_end[] asm("_binary_version_txt_end");
 
 // void ota_task(void *pParam) {
 //     while (1) {

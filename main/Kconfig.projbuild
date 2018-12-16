@@ -13,15 +13,15 @@ config WIFI_PASSWORD
 	    WiFi password (WPA or WPA2) for the example to use.
 
 config FIRMWARE_UPG_URL
-    string "HTTP Server URL"
+    string "OTA Firmware URL (HTTPS)"
     default "https://192.168.1.148:8070/ledrx.bin"
-	help
-		HTTP Server IP to download the image file from.
+    help
+        HTTPS URL containing the latest firmware.
 
 config FIRMWARE_VERSION_URL
-    string "HTTP Server URL"
+    string "OTA Firmware Version URL (HTTPS)"
     default "https://192.168.1.148:8070/version"
-	help
-		HTTP Server IP to download the image file from.
+    help
+        HTTPS URL with the version of the latest firmware in semver format.
 
 endmenu
