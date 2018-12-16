@@ -24,4 +24,10 @@ config FIRMWARE_VERSION_URL
     help
         HTTPS URL with the version of the latest firmware in semver format.
 
+config NUM_PIXELS
+    int "Number of pixels"
+    default 350
+    help
+        Number of pixels.
+
 endmenu

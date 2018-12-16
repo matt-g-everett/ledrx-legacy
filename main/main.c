@@ -3,10 +3,11 @@
 
 #include "esp_log.h"
 
+#include "coapserver.h"
+#include "ledcontrol.h"
+#include "ota.h"
 #include "semver.h"
 #include "wifi.h"
-#include "ota.h"
-#include "coapserver.h"
 
 #define OTA_STACK_SIZE 8192
 #define COAP_STACK_SIZE 2048
@@ -16,6 +17,7 @@
 #define WIFI_PASS CONFIG_WIFI_PASSWORD
 #define OTA_BIN_URL CONFIG_FIRMWARE_UPG_URL
 #define OTA_VERSION_URL CONFIG_FIRMWARE_VERSION_URL
+#define NUM_PIXELS CONFIG_NUM_PIXELS
 
 const static char *TAG = "ledrx_main";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
@@ -36,6 +38,7 @@ void app_main(void)
 
     wifi_initialise(WIFI_SSID, WIFI_PASS);
     ota_initialise((const char *)server_cert_pem_start, OTA_VERSION_URL, OTA_BIN_URL, (const char *)version_start);
+    led_control_initialise(NUM_PIXELS);
     xTaskCreatePinnedToCore(ota_task, "ota", OTA_STACK_SIZE, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(coap_task, "coap", COAP_STACK_SIZE, NULL, 5, NULL, 0);
     xTaskCreatePinnedToCore(led_task, "led", STACK_SIZE, NULL, 5, NULL, 1);
