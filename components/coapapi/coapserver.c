@@ -22,14 +22,14 @@ static coap_async_state_t *async = NULL;
 static void res_config_put(coap_context_t *ctx, const coap_endpoint_t *local_if)
 {
     coap_pdu_t *response;
-    unsigned char buf[3];
-    const char* response_data = "Done it!";
-    response = coap_pdu_init(async->flags & COAP_MESSAGE_CON, COAP_RESPONSE_CODE(205), 0, COAP_MAX_PDU_SIZE);
+    // unsigned char buf[3];
+    // const char* response_data = "Done it!";
+    response = coap_pdu_init(async->flags & COAP_MESSAGE_CON, COAP_RESPONSE_CODE(200), 0, COAP_MAX_PDU_SIZE);
     response->hdr->id = coap_new_message_id(ctx);
     if (async->tokenlen)
         coap_add_token(response, async->tokenlen, async->token);
-    coap_add_option(response, COAP_OPTION_CONTENT_TYPE, coap_encode_var_bytes(buf, COAP_MEDIATYPE_TEXT_PLAIN), buf);
-    coap_add_data  (response, strlen(response_data), (unsigned char *)response_data);
+    // coap_add_option(response, COAP_OPTION_CONTENT_TYPE, coap_encode_var_bytes(buf, COAP_MEDIATYPE_TEXT_PLAIN), buf);
+    // coap_add_data  (response, strlen(response_data), (unsigned char *)response_data);
 
     if (coap_send(ctx, local_if, &async->peer, response) == COAP_INVALID_TID) {
 
@@ -50,9 +50,33 @@ static void hnd_config_put(coap_context_t *ctx, struct coap_resource_t *resource
 {
     size_t size;
     uint8_t *data;
+    Ledapi__Config *config;
 
     coap_get_data(request, &size, &data);
     ESP_LOGI(TAG, "******PAYLOAD SIZE: %d", size);
+    config = ledapi__config__unpack(NULL, size, data);
+
+    switch (config->mode) {
+        case LEDAPI__CONFIG__MODE__OFF:
+            ESP_LOGI(TAG, "MODE=Off");
+            break;
+        
+        case LEDAPI__CONFIG__MODE__FIXED_FRAME:
+            ESP_LOGI(TAG, "MODE=Fixed Frame");
+            ESP_LOGI(TAG, "Frame LED Count %d.", config->fixed_frame->frame_data.len / 3);
+            break;
+        
+        case LEDAPI__CONFIG__MODE__SWISH_RAINBOW:
+            ESP_LOGI(TAG, "MODE=Swish Rainbow");
+            break;
+        
+        default:
+            ESP_LOGI(TAG, "Mode %d not supported.", config->mode);
+            break;
+    }
+
+    ledapi__config__free_unpacked(config, NULL);
+
 
     async = coap_register_async(ctx, peer, request, COAP_ASYNC_SEPARATE | COAP_ASYNC_CONFIRM, (void*)"no data");
 }

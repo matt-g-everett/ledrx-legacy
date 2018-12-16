@@ -104,8 +104,6 @@ uint8_t ota_download() {
     // Prevent triggering another download
     new_version_available = 0;
 
-    ESP_LOGI(TAG, "Starting OTA download...");
-
     esp_err_t err;
     /* update handle : set by esp_ota_begin(), must be freed via esp_ota_end() */
     esp_ota_handle_t update_handle = 0;
