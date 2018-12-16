@@ -8,7 +8,7 @@
 #include "nvs_flash.h"
 #include "coap.h"
 
-#include "coap_utils.h"
+#include "coapserver.h"
 #include "wifi.h"
 
 #define COAP_DEFAULT_TIME_SEC 5

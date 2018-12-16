@@ -6,7 +6,7 @@
 #include "semver.h"
 #include "wifi.h"
 #include "ota.h"
-#include "coap_utils.h"
+#include "coapserver.h"
 
 #define OTA_STACK_SIZE 8192
 #define COAP_STACK_SIZE 2048
