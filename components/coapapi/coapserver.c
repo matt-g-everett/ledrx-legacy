@@ -23,7 +23,7 @@ static void res_config_put(coap_context_t *ctx, const coap_endpoint_t *local_if)
 {
     coap_pdu_t *response;
     unsigned char buf[3];
-    const char* response_data = "Hello World!";
+    const char* response_data = "Done it!";
     response = coap_pdu_init(async->flags & COAP_MESSAGE_CON, COAP_RESPONSE_CODE(205), 0, COAP_MAX_PDU_SIZE);
     response->hdr->id = coap_new_message_id(ctx);
     if (async->tokenlen)
@@ -48,6 +48,12 @@ static void hnd_config_put(coap_context_t *ctx, struct coap_resource_t *resource
     const coap_endpoint_t *local_interface, coap_address_t *peer,
     coap_pdu_t *request, str *token, coap_pdu_t *response)
 {
+    size_t size;
+    uint8_t *data;
+
+    coap_get_data(request, &size, &data);
+    ESP_LOGI(TAG, "******PAYLOAD SIZE: %d", size);
+
     async = coap_register_async(ctx, peer, request, COAP_ASYNC_SEPARATE | COAP_ASYNC_CONFIRM, (void*)"no data");
 }
 
@@ -80,7 +86,7 @@ void coap_task(void *pParam)
             tv.tv_usec = COAP_DEFAULT_TIME_USEC;
             tv.tv_sec = COAP_DEFAULT_TIME_SEC;
             /* Initialize the resource */
-            resource = coap_resource_init((unsigned char *)"config", 5, 0);
+            resource = coap_resource_init((unsigned char *)"config", 6, 0);
             if (resource){
                 coap_register_handler(resource, COAP_REQUEST_PUT, hnd_config_put);
                 coap_add_resource(ctx, resource);
