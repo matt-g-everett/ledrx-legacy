@@ -23,24 +23,10 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 extern const uint8_t version_start[] asm("_binary_version_txt_start");
 extern const uint8_t version_end[] asm("_binary_version_txt_end");
 
-// void ota_task(void *pParam) {
-//     while (1) {
-//         ESP_LOGI(TAG, "OTAing it on core (%d)...", xPortGetCoreID());
-//         vTaskDelay(1000 / portTICK_PERIOD_MS);
-//     }
-// }
-
-// void coap_task(void *pParam) {
-//     while (1) {
-//         ESP_LOGI(TAG, "Doing coap crap on core (%d)...", xPortGetCoreID());
-//         vTaskDelay(2000 / portTICK_PERIOD_MS);
-//     }
-// }
-
 void led_task(void *pParam) {
     while (1) {
         ESP_LOGI(TAG, "Lit that shit up on core (%d)...", xPortGetCoreID());
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
     }
 }
 

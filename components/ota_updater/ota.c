@@ -52,16 +52,17 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
                 char version[16];
                 strncpy(version, (const char *)evt->data, (size_t)evt->data_len);
                 version[evt->data_len] = '\0';
-                ESP_LOGI(TAG, "OTA Version: %s", version);
             
                 semver_t next;
                 semver_parse(version, &next);
-                ESP_LOGI(TAG, "Parsed OTA version - Major: %d, Minor: %d, Patch: %d, pr: %s\n", next.major, next.minor, next.patch, next.prerelease);
                 
                 int result = semver_gt(next, current_version);
                 if (result) {
-                    ESP_LOGI(TAG, "New version available.");
+                    ESP_LOGI(TAG, "New firmware version found, downloading: %s", version);
                     new_version_available = 1;
+                }
+                else {
+                    ESP_LOGI(TAG, "Current firmware %s is up to date.", version);
                 }
                 
                 semver_free(&next);
@@ -89,7 +90,7 @@ static void https_get(const char *url)
     esp_err_t err = esp_http_client_perform(client);
 
     if (err == ESP_OK) {
-        ESP_LOGI(TAG, "HTTPS Status = %d, content_length = %d",
+        ESP_LOGD(TAG, "HTTPS Status = %d, content_length = %d",
                 esp_http_client_get_status_code(client),
                 esp_http_client_get_content_length(client));
     } else {
@@ -200,7 +201,6 @@ void ota_task(void *pParam) {
         // Check that wifi is still connected
         wifi_connected = wifi_wait(0);
         if (wifi_connected) {
-            ESP_LOGI(TAG, "WiFi connected, checking for OTA update...");
             https_get(ota_version_url);
             if (new_version_available) {
                 ota_download();
@@ -210,7 +210,7 @@ void ota_task(void *pParam) {
             ESP_LOGI(TAG, "WiFi not connected, skipping check for OTA update...");
         }
 
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -220,5 +220,4 @@ void ota_initialise(const char *cert, const char *version_url, const char *bin_u
     ota_bin_url = bin_url;
 
     semver_parse(version, &current_version);
-    ESP_LOGI(TAG, "Current version parsed - Major: %d, Minor: %d, Patch: %d, pr: %s\n", current_version.major, current_version.minor, current_version.patch, current_version.prerelease);
 }

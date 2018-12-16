@@ -8,17 +8,18 @@
 #include "nvs_flash.h"
 #include "coap.h"
 
+#include "coapapi.pb-c.h"
 #include "coapserver.h"
 #include "wifi.h"
 
-#define COAP_DEFAULT_TIME_SEC 5
+#define COAP_DEFAULT_TIME_SEC 30
 #define COAP_DEFAULT_TIME_USEC 0
 
 const static char *TAG = "CoAP_server";
 
 static coap_async_state_t *async = NULL;
 
-static void send_async_response(coap_context_t *ctx, const coap_endpoint_t *local_if)
+static void res_config_put(coap_context_t *ctx, const coap_endpoint_t *local_if)
 {
     coap_pdu_t *response;
     unsigned char buf[3];
@@ -43,7 +44,7 @@ static void send_async_response(coap_context_t *ctx, const coap_endpoint_t *loca
 /*
  * The resource handler
  */
-static void async_handler(coap_context_t *ctx, struct coap_resource_t *resource,
+static void hnd_config_put(coap_context_t *ctx, struct coap_resource_t *resource,
     const coap_endpoint_t *local_interface, coap_address_t *peer,
     coap_pdu_t *request, str *token, coap_pdu_t *response)
 {
@@ -79,9 +80,9 @@ void coap_task(void *pParam)
             tv.tv_usec = COAP_DEFAULT_TIME_USEC;
             tv.tv_sec = COAP_DEFAULT_TIME_SEC;
             /* Initialize the resource */
-            resource = coap_resource_init((unsigned char *)"hello", 5, 0);
+            resource = coap_resource_init((unsigned char *)"config", 5, 0);
             if (resource){
-                coap_register_handler(resource, COAP_REQUEST_GET, async_handler);
+                coap_register_handler(resource, COAP_REQUEST_PUT, hnd_config_put);
                 coap_add_resource(ctx, resource);
                 /*For incoming connections*/
                 for (;;) {
@@ -95,12 +96,10 @@ void coap_task(void *pParam)
                             coap_read(ctx);
                     } else if (result < 0){
                         break;
-                    } else {
-                        ESP_LOGE(TAG, "select timeout");
                     }
 
                     if (async) {
-                        send_async_response(ctx, ctx->endpoint);
+                        res_config_put(ctx, ctx->endpoint);
                     }
                 }
             }
