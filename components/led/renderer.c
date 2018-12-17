@@ -1,12 +1,14 @@
 #include "freertos/FreeRTOS.h"
-#include "freertos/semphr.h"
-#include "freertos/task.h"
 
-#include "esp_log.h"
 #include "driver/rmt.h"
+#include "esp_log.h"
 
-#include "ledcontrol.h"
 #include "pixels.h"
+#include "renderer.h"
+
+#define NUM_PIXELS CONFIG_NUM_PIXELS
+#define NUM_SUB_PIXELS (NUM_PIXELS * 3)
+#define NUM_BITS (NUM_SUB_PIXELS * 8)
 
 #define RMT_PIN_SEL GPIO_SEL_27
 #define RMT_PIN GPIO_NUM_27
@@ -27,21 +29,27 @@ rmt_item32_t low = {
     .duration1 = ZERO_LOW_TICKS, .level1 = 0
 };
 
-uint16_t pixel_count;
-uint16_t subpixel_count;
+uint16_t subpixel_count = NUM_PIXELS * 3;
 FrameCalculator calculate_frame = NULL;
 void *state = NULL;
-rmt_item32_t *items;
+rmt_item32_t items[NUM_BITS];
 
-static void render_frame(FRAME_t *frame) {
+static void send_frame(FRAME_t *frame) {
+    //ESP_LOGI(TAG, "Sending frame with length %d.", frame->len);
+
     uint8_t *subpixels;
     uint8_t subpixel;
     uint32_t bit = 0;
     for (uint16_t i = 0; i < frame->len; i++) {
+        //ESP_LOGI(TAG, "R %d G %d B %d.", frame->data[i].r, frame->data[i].g, frame->data[i].b);
         subpixels = frame->data[i].subpixels;
         for (int8_t s = 0; s < 3; s++) {
             subpixel = subpixels[s];
-            for (int8_t b = 7; b >= 0; b++) {
+            //ESP_LOGI(TAG, "subpixel %d.", subpixel);
+
+            for (int8_t b = 7; b >= 0; b--) {
+                //ESP_LOGI(TAG, "bit %d.", bit);
+
                 if ((1 << b) & subpixel) {
                     items[bit] = high;
                 }
@@ -54,7 +62,8 @@ static void render_frame(FRAME_t *frame) {
         }
     }
 
-    rmt_write_items(RMT_CHANNEL_0, items, subpixel_count, true);
+    //ESP_LOGI(TAG, "RMT bits %d.", bit);
+    rmt_write_items(RMT_CHANNEL_0, items, bit, true);
 }
 
 static void configure_rmt() {
@@ -63,7 +72,7 @@ static void configure_rmt() {
     gpioConf.mode = GPIO_MODE_OUTPUT;
     gpioConf.intr_type = GPIO_INTR_DISABLE;
     gpioConf.pull_down_en = GPIO_PULLDOWN_ENABLE;
-    gpioConf.pull_up_en = GPIO_PULLUP_DISABLE;
+    gpioConf.pull_up_en = GPIO_PULLUP_ENABLE;
     gpio_config(&gpioConf);
 
     rmt_tx_config_t rmtTXConf;
@@ -84,28 +93,20 @@ static void configure_rmt() {
     rmt_driver_install(RMT_CHANNEL_0, 0, 0);
 }
 
-void led_control_set_strategy(FrameCalculator frame_calc, void *pState) {
+void renderer_set_strategy(FrameCalculator frame_calc, void *pState) {
     calculate_frame = frame_calc;
     state = pState;
 }
 
-void led_control_task(void *pParam) {
-    FRAME_t *frame;
-    
-    while(1) {
-        if (calculate_frame) {
-            frame = calculate_frame(state);
-            render_frame(frame);
-        }
+void renderer_render_frame(FRAME_t *frame) {
+    //ESP_LOGI(TAG, "calculate_frame %d.", (uint32_t)calculate_frame);
+    if (calculate_frame) {
+        calculate_frame(frame, state);
+        //ESP_LOGI(TAG, "frame->len %d.", frame->len);
+        send_frame(frame);
     }
 }
 
-void led_control_initialise(uint16_t num_pixels) {
+void renderer_initialise() {
     configure_rmt();
-    pixel_count = num_pixels;
-    ESP_LOGI(TAG, "*****pixel_count: %d", pixel_count);
-    subpixel_count = pixel_count * 3;
-    ESP_LOGI(TAG, "*****subpixel_count: %d", subpixel_count);
-    items = (rmt_item32_t*)malloc(subpixel_count * sizeof(rmt_item32_t));
-    // xCreateBinarySemaphoreStatic();
 }

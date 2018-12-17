@@ -5,6 +5,9 @@
 #ifndef __HSV_H
 #define __HSV_H
 
+#define HSV_HUE_SEXTANT	256
+#define HSV_HUE_STEPS (6 * HSV_HUE_SEXTANT)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

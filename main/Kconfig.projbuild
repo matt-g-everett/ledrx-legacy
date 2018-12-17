@@ -30,4 +30,10 @@ config NUM_PIXELS
     help
         Number of pixels.
 
+config FRAME_BUFFER_SIZE
+    int "Number of frames to buffer (for streaming from ledtx)."
+    default 30
+    help
+        Number of frames to buffer (for streaming from ledtx).
+
 endmenu
