@@ -10,7 +10,7 @@
 #include "hsv.h"
 
 #define SATURATION 255
-#define VALUE 5
+#define VALUE 40
 
 #ifndef max
 #define max(a,b) (((a) > (b)) ? (a) : (b))
@@ -50,23 +50,36 @@ static void rainbow_trail(uint16_t index, uint16_t lit, uint16_t trail_length, u
 
     if (abs(diff) > half_trail) {
         v = 0;
-        // *r = 0;
-        // *g = 0;
-        // *b = 0;
     }
-    else {
-        v = v;
-        // *r = 0;
-        // *g = 0;
-        // *b = 128;
-    }
-
     
     int16_t clip = min(max(diff, -half_trail), half_trail);
     int16_t hue = (clip + half_trail) * (HSV_HUE_STEPS / trail_length);
 
     fast_hsv2rgb_8bit(hue, s, v, r, g, b);
 }
+
+// static void rainbow_wrap(uint16_t index, uint16_t lit, uint16_t trail_length, uint8_t v, uint8_t s,
+//         uint8_t *r, uint8_t *g, uint8_t *b) {
+
+//     int16_t diff = (int16_t)index - (int16_t)lit;
+//     uint16_t half_trail = trail_length / 2;
+
+    
+//     int16_t clip = min(max(diff, -half_trail), half_trail);
+//     int16_t hue = (clip + half_trail) * (HSV_HUE_STEPS / trail_length);
+
+//     fast_hsv2rgb_8bit(hue, s, v, r, g, b);
+// }
+
+// static void advance_index_wrap(int16_t *index, int16_t trail_length, int16_t num_pixels) {
+//     *index++;
+
+//     int16_t trail_multiple = (int16_t)(num_pixels / trail_length) + 1;
+//     int16_t virtual_length = trail_multiple * trail_length;
+//     if (index > virtual_length) {
+//         index = 0;
+//     }
+// }
 
 static void advance_index(int16_t *index, uint8_t *forward, int16_t min, int16_t max) {
     if (*forward) {

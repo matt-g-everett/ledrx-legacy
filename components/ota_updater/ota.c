@@ -11,6 +11,7 @@
 #include "ota.h"
 #include "semver.h"
 #include "wifi.h"
+#include "controller.h"
 
 #define HASH_LEN 32 /* SHA-256 digest length */
 #define BUFFSIZE 1024
@@ -60,6 +61,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
                 if (result) {
                     ESP_LOGI(TAG, "New firmware version found, downloading: %s", version);
                     new_version_available = 1;
+                    controller_stop();
                 }
                 else {
                     ESP_LOGI(TAG, "Current firmware %s is up to date.", version);

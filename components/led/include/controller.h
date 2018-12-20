@@ -12,6 +12,7 @@ extern "C" {
 void controller_initialise();
 void controller_set_mode();
 void controller_task(void *pParam);
+void controller_stop();
 
 #ifdef __cplusplus
 }

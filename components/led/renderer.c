@@ -1,10 +1,12 @@
 #include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #include "driver/rmt.h"
 #include "esp_log.h"
 
 #include "pixels.h"
 #include "renderer.h"
+#include "ws2811.h"
 
 #define NUM_PIXELS CONFIG_NUM_PIXELS
 #define NUM_SUB_PIXELS (NUM_PIXELS * 3)
@@ -17,39 +19,33 @@
 #define ONE_LOW_TICKS 13
 #define ZERO_HIGH_TICKS 5
 #define ZERO_LOW_TICKS 20
+#define RESET_TICKS 500
 
 const static char *TAG = "ledrx_ledcontrol";
 
-rmt_item32_t high = {
+static rmt_item32_t high = {
     .duration0 = ONE_HIGH_TICKS, .level0 = 1,
     .duration1 = ONE_LOW_TICKS, .level1 = 0
 };
-rmt_item32_t low = {
+static rmt_item32_t low = {
     .duration0 = ZERO_HIGH_TICKS, .level0 = 1,
     .duration1 = ZERO_LOW_TICKS, .level1 = 0
 };
 
-uint16_t subpixel_count = NUM_PIXELS * 3;
-FrameCalculator calculate_frame = NULL;
-void *state = NULL;
-rmt_item32_t items[NUM_BITS];
+static FrameCalculator calculate_frame = NULL;
+static void *state = NULL;
+static rmt_item32_t items[NUM_BITS];
+static portMUX_TYPE mutex = portMUX_INITIALIZER_UNLOCKED;
 
 static void send_frame(FRAME_t *frame) {
-    //ESP_LOGI(TAG, "Sending frame with length %d.", frame->len);
-
     uint8_t *subpixels;
     uint8_t subpixel;
     uint32_t bit = 0;
     for (uint16_t i = 0; i < frame->len; i++) {
-        //ESP_LOGI(TAG, "R %d G %d B %d.", frame->data[i].r, frame->data[i].g, frame->data[i].b);
         subpixels = frame->data[i].subpixels;
         for (int8_t s = 0; s < 3; s++) {
             subpixel = subpixels[s];
-            //ESP_LOGI(TAG, "subpixel %d.", subpixel);
-
             for (int8_t b = 7; b >= 0; b--) {
-                //ESP_LOGI(TAG, "bit %d.", bit);
-
                 if ((1 << b) & subpixel) {
                     items[bit] = high;
                 }
@@ -62,8 +58,10 @@ static void send_frame(FRAME_t *frame) {
         }
     }
 
-    //ESP_LOGI(TAG, "RMT bits %d.", bit);
-    rmt_write_items(RMT_CHANNEL_0, items, bit, true);
+    // Extend the last low duration to send the reset
+    items[bit - 1].duration1 = RESET_TICKS;
+
+    rmt_write_items(RMT_CHANNEL_0, items, bit, false);
 }
 
 static void configure_rmt() {
@@ -72,7 +70,7 @@ static void configure_rmt() {
     gpioConf.mode = GPIO_MODE_OUTPUT;
     gpioConf.intr_type = GPIO_INTR_DISABLE;
     gpioConf.pull_down_en = GPIO_PULLDOWN_ENABLE;
-    gpioConf.pull_up_en = GPIO_PULLUP_ENABLE;
+    gpioConf.pull_up_en = GPIO_PULLUP_DISABLE;
     gpio_config(&gpioConf);
 
     rmt_tx_config_t rmtTXConf;
@@ -99,14 +97,14 @@ void renderer_set_strategy(FrameCalculator frame_calc, void *pState) {
 }
 
 void renderer_render_frame(FRAME_t *frame) {
-    //ESP_LOGI(TAG, "calculate_frame %d.", (uint32_t)calculate_frame);
     if (calculate_frame) {
         calculate_frame(frame, state);
-        //ESP_LOGI(TAG, "frame->len %d.", frame->len);
-        send_frame(frame);
+        ws2811_setColors(frame->len, frame->data);
+        //send_frame(frame);
     }
 }
 
 void renderer_initialise() {
-    configure_rmt();
+    ws2811_init(RMT_PIN);
+    //configure_rmt();
 }

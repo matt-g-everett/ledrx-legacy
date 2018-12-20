@@ -40,7 +40,7 @@ void app_main(void)
     wifi_initialise(WIFI_SSID, WIFI_PASS);
     ota_initialise((const char *)server_cert_pem_start, OTA_VERSION_URL, OTA_BIN_URL, (const char *)version_start);
     controller_initialise();
-    xTaskCreatePinnedToCore(ota_task, "ota", OTA_STACK_SIZE, NULL, 1, NULL, 0);
-    xTaskCreatePinnedToCore(coap_task, "coap", COAP_STACK_SIZE, NULL, 1, NULL, 0);
-    xTaskCreatePinnedToCore(controller_task, "led", STACK_SIZE, NULL, configMAX_PRIORITIES - 1, NULL, 1);
+    xTaskCreatePinnedToCore(ota_task, "ota", OTA_STACK_SIZE, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(coap_task, "coap", COAP_STACK_SIZE, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(controller_task, "led", STACK_SIZE, NULL, 5, NULL, 1);
 }
