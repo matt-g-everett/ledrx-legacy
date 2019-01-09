@@ -63,11 +63,19 @@ static void hnd_config_put(coap_context_t *ctx, struct coap_resource_t *resource
         
         case LEDAPI__CONFIG__MODE__FIXED_FRAME:
             ESP_LOGI(TAG, "MODE=Fixed Frame");
-            ESP_LOGI(TAG, "Frame LED Count %d.", config->fixed_frame->frame_data.len / 3);
+            ESP_LOGI(TAG, "Frame LED Count %d.", config->frame->data.len / 3);
             break;
         
-        case LEDAPI__CONFIG__MODE__SWISH_RAINBOW:
-            ESP_LOGI(TAG, "MODE=Swish Rainbow");
+        case LEDAPI__CONFIG__MODE__SCAN:
+            ESP_LOGI(TAG, "MODE=Scan");
+            break;
+        
+        case LEDAPI__CONFIG__MODE__CLASSIC:
+            ESP_LOGI(TAG, "MODE=Classic");
+            break;
+
+        case LEDAPI__CONFIG__MODE__PRESET:
+            ESP_LOGI(TAG, "MODE=Preset");
             break;
         
         default:

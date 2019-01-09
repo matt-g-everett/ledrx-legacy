@@ -10,7 +10,7 @@
 void   ledapi__frame__init
                      (Ledapi__Frame         *message)
 {
-  static const Ledapi__Frame init_value = LEDAPI__FRAME__INIT;
+  static Ledapi__Frame init_value = LEDAPI__FRAME__INIT;
   *message = init_value;
 }
 size_t ledapi__frame__get_packed_size
@@ -47,15 +47,99 @@ void   ledapi__frame__free_unpacked
                      (Ledapi__Frame *message,
                       ProtobufCAllocator *allocator)
 {
-  if(!message)
-    return;
   assert(message->base.descriptor == &ledapi__frame__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   ledapi__classic_config__init
+                     (Ledapi__ClassicConfig         *message)
+{
+  static Ledapi__ClassicConfig init_value = LEDAPI__CLASSIC_CONFIG__INIT;
+  *message = init_value;
+}
+size_t ledapi__classic_config__get_packed_size
+                     (const Ledapi__ClassicConfig *message)
+{
+  assert(message->base.descriptor == &ledapi__classic_config__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t ledapi__classic_config__pack
+                     (const Ledapi__ClassicConfig *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &ledapi__classic_config__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t ledapi__classic_config__pack_to_buffer
+                     (const Ledapi__ClassicConfig *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &ledapi__classic_config__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Ledapi__ClassicConfig *
+       ledapi__classic_config__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Ledapi__ClassicConfig *)
+     protobuf_c_message_unpack (&ledapi__classic_config__descriptor,
+                                allocator, len, data);
+}
+void   ledapi__classic_config__free_unpacked
+                     (Ledapi__ClassicConfig *message,
+                      ProtobufCAllocator *allocator)
+{
+  assert(message->base.descriptor == &ledapi__classic_config__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   ledapi__scan_config__init
+                     (Ledapi__ScanConfig         *message)
+{
+  static Ledapi__ScanConfig init_value = LEDAPI__SCAN_CONFIG__INIT;
+  *message = init_value;
+}
+size_t ledapi__scan_config__get_packed_size
+                     (const Ledapi__ScanConfig *message)
+{
+  assert(message->base.descriptor == &ledapi__scan_config__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t ledapi__scan_config__pack
+                     (const Ledapi__ScanConfig *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &ledapi__scan_config__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t ledapi__scan_config__pack_to_buffer
+                     (const Ledapi__ScanConfig *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &ledapi__scan_config__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+Ledapi__ScanConfig *
+       ledapi__scan_config__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (Ledapi__ScanConfig *)
+     protobuf_c_message_unpack (&ledapi__scan_config__descriptor,
+                                allocator, len, data);
+}
+void   ledapi__scan_config__free_unpacked
+                     (Ledapi__ScanConfig *message,
+                      ProtobufCAllocator *allocator)
+{
+  assert(message->base.descriptor == &ledapi__scan_config__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   ledapi__config__init
                      (Ledapi__Config         *message)
 {
-  static const Ledapi__Config init_value = LEDAPI__CONFIG__INIT;
+  static Ledapi__Config init_value = LEDAPI__CONFIG__INIT;
   *message = init_value;
 }
 size_t ledapi__config__get_packed_size
@@ -92,15 +176,13 @@ void   ledapi__config__free_unpacked
                      (Ledapi__Config *message,
                       ProtobufCAllocator *allocator)
 {
-  if(!message)
-    return;
   assert(message->base.descriptor == &ledapi__config__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 void   ledapi__frame_set__init
                      (Ledapi__FrameSet         *message)
 {
-  static const Ledapi__FrameSet init_value = LEDAPI__FRAME_SET__INIT;
+  static Ledapi__FrameSet init_value = LEDAPI__FRAME_SET__INIT;
   *message = init_value;
 }
 size_t ledapi__frame_set__get_packed_size
@@ -137,20 +219,18 @@ void   ledapi__frame_set__free_unpacked
                      (Ledapi__FrameSet *message,
                       ProtobufCAllocator *allocator)
 {
-  if(!message)
-    return;
   assert(message->base.descriptor == &ledapi__frame_set__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
 static const ProtobufCFieldDescriptor ledapi__frame__field_descriptors[1] =
 {
   {
-    "frame_data",
+    "data",
     1,
-    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    0,   /* quantifier_offset */
-    offsetof(Ledapi__Frame, frame_data),
+    offsetof(Ledapi__Frame, has_data),
+    offsetof(Ledapi__Frame, data),
     NULL,
     NULL,
     0,             /* flags */
@@ -158,7 +238,7 @@ static const ProtobufCFieldDescriptor ledapi__frame__field_descriptors[1] =
   },
 };
 static const unsigned ledapi__frame__field_indices_by_name[] = {
-  0,   /* field[0] = frame_data */
+  0,   /* field[0] = data */
 };
 static const ProtobufCIntRange ledapi__frame__number_ranges[1 + 1] =
 {
@@ -180,20 +260,260 @@ const ProtobufCMessageDescriptor ledapi__frame__descriptor =
   (ProtobufCMessageInit) ledapi__frame__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCEnumValue ledapi__config__mode__enum_values_by_number[3] =
+static const ProtobufCFieldDescriptor ledapi__classic_config__field_descriptors[6] =
+{
+  {
+    "num_highlights",
+    1,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_num_highlights),
+    offsetof(Ledapi__ClassicConfig, num_highlights),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "background_rgb",
+    2,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_background_rgb),
+    offsetof(Ledapi__ClassicConfig, background_rgb),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "highlight_rgb",
+    3,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_highlight_rgb),
+    offsetof(Ledapi__ClassicConfig, highlight_rgb),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "star_rgb",
+    4,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_star_rgb),
+    offsetof(Ledapi__ClassicConfig, star_rgb),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "num_twinkles",
+    5,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_num_twinkles),
+    offsetof(Ledapi__ClassicConfig, num_twinkles),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "twinkle_rgb",
+    6,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ClassicConfig, has_twinkle_rgb),
+    offsetof(Ledapi__ClassicConfig, twinkle_rgb),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned ledapi__classic_config__field_indices_by_name[] = {
+  1,   /* field[1] = background_rgb */
+  2,   /* field[2] = highlight_rgb */
+  0,   /* field[0] = num_highlights */
+  4,   /* field[4] = num_twinkles */
+  3,   /* field[3] = star_rgb */
+  5,   /* field[5] = twinkle_rgb */
+};
+static const ProtobufCIntRange ledapi__classic_config__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 6 }
+};
+const ProtobufCMessageDescriptor ledapi__classic_config__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "ledapi.ClassicConfig",
+  "ClassicConfig",
+  "Ledapi__ClassicConfig",
+  "ledapi",
+  sizeof(Ledapi__ClassicConfig),
+  6,
+  ledapi__classic_config__field_descriptors,
+  ledapi__classic_config__field_indices_by_name,
+  1,  ledapi__classic_config__number_ranges,
+  (ProtobufCMessageInit) ledapi__classic_config__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCEnumValue ledapi__scan_config__scan_mode__enum_values_by_number[2] =
+{
+  { "WRAP", "LEDAPI__SCAN_CONFIG__SCAN_MODE__WRAP", 0 },
+  { "SWISH", "LEDAPI__SCAN_CONFIG__SCAN_MODE__SWISH", 1 },
+};
+static const ProtobufCIntRange ledapi__scan_config__scan_mode__value_ranges[] = {
+{0, 0},{0, 2}
+};
+static const ProtobufCEnumValueIndex ledapi__scan_config__scan_mode__enum_values_by_name[2] =
+{
+  { "SWISH", 1 },
+  { "WRAP", 0 },
+};
+const ProtobufCEnumDescriptor ledapi__scan_config__scan_mode__descriptor =
+{
+  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+  "ledapi.ScanConfig.ScanMode",
+  "ScanMode",
+  "Ledapi__ScanConfig__ScanMode",
+  "ledapi",
+  2,
+  ledapi__scan_config__scan_mode__enum_values_by_number,
+  2,
+  ledapi__scan_config__scan_mode__enum_values_by_name,
+  1,
+  ledapi__scan_config__scan_mode__value_ranges,
+  NULL,NULL,NULL,NULL   /* reserved[1234] */
+};
+static const ProtobufCEnumValue ledapi__scan_config__direction__enum_values_by_number[2] =
+{
+  { "DOWN", "LEDAPI__SCAN_CONFIG__DIRECTION__DOWN", 0 },
+  { "UP", "LEDAPI__SCAN_CONFIG__DIRECTION__UP", 1 },
+};
+static const ProtobufCIntRange ledapi__scan_config__direction__value_ranges[] = {
+{0, 0},{0, 2}
+};
+static const ProtobufCEnumValueIndex ledapi__scan_config__direction__enum_values_by_name[2] =
+{
+  { "DOWN", 0 },
+  { "UP", 1 },
+};
+const ProtobufCEnumDescriptor ledapi__scan_config__direction__descriptor =
+{
+  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+  "ledapi.ScanConfig.Direction",
+  "Direction",
+  "Ledapi__ScanConfig__Direction",
+  "ledapi",
+  2,
+  ledapi__scan_config__direction__enum_values_by_number,
+  2,
+  ledapi__scan_config__direction__enum_values_by_name,
+  1,
+  ledapi__scan_config__direction__value_ranges,
+  NULL,NULL,NULL,NULL   /* reserved[1234] */
+};
+static const ProtobufCFieldDescriptor ledapi__scan_config__field_descriptors[4] =
+{
+  {
+    "mode",
+    1,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_ENUM,
+    offsetof(Ledapi__ScanConfig, has_mode),
+    offsetof(Ledapi__ScanConfig, mode),
+    &ledapi__scan_config__scan_mode__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "intensity",
+    2,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ScanConfig, has_intensity),
+    offsetof(Ledapi__ScanConfig, intensity),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "trail_length",
+    3,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_UINT32,
+    offsetof(Ledapi__ScanConfig, has_trail_length),
+    offsetof(Ledapi__ScanConfig, trail_length),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "direction",
+    4,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_ENUM,
+    offsetof(Ledapi__ScanConfig, has_direction),
+    offsetof(Ledapi__ScanConfig, direction),
+    &ledapi__scan_config__direction__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned ledapi__scan_config__field_indices_by_name[] = {
+  3,   /* field[3] = direction */
+  1,   /* field[1] = intensity */
+  0,   /* field[0] = mode */
+  2,   /* field[2] = trail_length */
+};
+static const ProtobufCIntRange ledapi__scan_config__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 4 }
+};
+const ProtobufCMessageDescriptor ledapi__scan_config__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "ledapi.ScanConfig",
+  "ScanConfig",
+  "Ledapi__ScanConfig",
+  "ledapi",
+  sizeof(Ledapi__ScanConfig),
+  4,
+  ledapi__scan_config__field_descriptors,
+  ledapi__scan_config__field_indices_by_name,
+  1,  ledapi__scan_config__number_ranges,
+  (ProtobufCMessageInit) ledapi__scan_config__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCEnumValue ledapi__config__mode__enum_values_by_number[5] =
 {
   { "OFF", "LEDAPI__CONFIG__MODE__OFF", 0 },
   { "FIXED_FRAME", "LEDAPI__CONFIG__MODE__FIXED_FRAME", 1 },
-  { "SWISH_RAINBOW", "LEDAPI__CONFIG__MODE__SWISH_RAINBOW", 2 },
+  { "PRESET", "LEDAPI__CONFIG__MODE__PRESET", 2 },
+  { "SCAN", "LEDAPI__CONFIG__MODE__SCAN", 3 },
+  { "CLASSIC", "LEDAPI__CONFIG__MODE__CLASSIC", 4 },
 };
 static const ProtobufCIntRange ledapi__config__mode__value_ranges[] = {
-{0, 0},{0, 3}
+{0, 0},{0, 5}
 };
-static const ProtobufCEnumValueIndex ledapi__config__mode__enum_values_by_name[3] =
+static const ProtobufCEnumValueIndex ledapi__config__mode__enum_values_by_name[5] =
 {
+  { "CLASSIC", 4 },
   { "FIXED_FRAME", 1 },
   { "OFF", 0 },
-  { "SWISH_RAINBOW", 2 },
+  { "PRESET", 2 },
+  { "SCAN", 3 },
 };
 const ProtobufCEnumDescriptor ledapi__config__mode__descriptor =
 {
@@ -202,22 +522,52 @@ const ProtobufCEnumDescriptor ledapi__config__mode__descriptor =
   "Mode",
   "Ledapi__Config__Mode",
   "ledapi",
-  3,
+  5,
   ledapi__config__mode__enum_values_by_number,
-  3,
+  5,
   ledapi__config__mode__enum_values_by_name,
   1,
   ledapi__config__mode__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor ledapi__config__field_descriptors[2] =
+static const ProtobufCEnumValue ledapi__config__preset__enum_values_by_number[3] =
+{
+  { "NONE", "LEDAPI__CONFIG__PRESET__NONE", 0 },
+  { "NIGHT", "LEDAPI__CONFIG__PRESET__NIGHT", 1 },
+  { "CLASSIC_TREE", "LEDAPI__CONFIG__PRESET__CLASSIC_TREE", 2 },
+};
+static const ProtobufCIntRange ledapi__config__preset__value_ranges[] = {
+{0, 0},{0, 3}
+};
+static const ProtobufCEnumValueIndex ledapi__config__preset__enum_values_by_name[3] =
+{
+  { "CLASSIC_TREE", 2 },
+  { "NIGHT", 1 },
+  { "NONE", 0 },
+};
+const ProtobufCEnumDescriptor ledapi__config__preset__descriptor =
+{
+  PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
+  "ledapi.Config.Preset",
+  "Preset",
+  "Ledapi__Config__Preset",
+  "ledapi",
+  3,
+  ledapi__config__preset__enum_values_by_number,
+  3,
+  ledapi__config__preset__enum_values_by_name,
+  1,
+  ledapi__config__preset__value_ranges,
+  NULL,NULL,NULL,NULL   /* reserved[1234] */
+};
+static const ProtobufCFieldDescriptor ledapi__config__field_descriptors[5] =
 {
   {
     "mode",
     1,
-    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    0,   /* quantifier_offset */
+    offsetof(Ledapi__Config, has_mode),
     offsetof(Ledapi__Config, mode),
     &ledapi__config__mode__descriptor,
     NULL,
@@ -225,26 +575,65 @@ static const ProtobufCFieldDescriptor ledapi__config__field_descriptors[2] =
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
-    "fixed_frame",
+    "preset",
     2,
-    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_ENUM,
+    offsetof(Ledapi__Config, has_preset),
+    offsetof(Ledapi__Config, preset),
+    &ledapi__config__preset__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "frame",
+    3,
+    PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Ledapi__Config, fixed_frame),
+    offsetof(Ledapi__Config, frame),
     &ledapi__frame__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "classic_config",
+    4,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Ledapi__Config, classic_config),
+    &ledapi__classic_config__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "scan_config",
+    5,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Ledapi__Config, scan_config),
+    &ledapi__scan_config__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
 static const unsigned ledapi__config__field_indices_by_name[] = {
-  1,   /* field[1] = fixed_frame */
+  3,   /* field[3] = classic_config */
+  2,   /* field[2] = frame */
   0,   /* field[0] = mode */
+  1,   /* field[1] = preset */
+  4,   /* field[4] = scan_config */
 };
 static const ProtobufCIntRange ledapi__config__number_ranges[1 + 1] =
 {
   { 1, 0 },
-  { 0, 2 }
+  { 0, 5 }
 };
 const ProtobufCMessageDescriptor ledapi__config__descriptor =
 {
@@ -254,7 +643,7 @@ const ProtobufCMessageDescriptor ledapi__config__descriptor =
   "Ledapi__Config",
   "ledapi",
   sizeof(Ledapi__Config),
-  2,
+  5,
   ledapi__config__field_descriptors,
   ledapi__config__field_indices_by_name,
   1,  ledapi__config__number_ranges,
