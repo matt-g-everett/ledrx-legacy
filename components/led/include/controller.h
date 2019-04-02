@@ -1,5 +1,6 @@
 #include "freertos/FreeRTOS.h"
 
+#include "coapapi.pb-c.h"
 #include "pixels.h"
 
 #ifndef __CONTROLLER_H
@@ -10,7 +11,7 @@ extern "C" {
 #endif
 
 void controller_initialise();
-void controller_set_mode();
+void controller_configure(Ledapi__Config *);
 void controller_task(void *pParam);
 void controller_stop();
 
